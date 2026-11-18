@@ -1,122 +1,94 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, {useState} from 'react';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+import perfilImg from './assets/perfil.jpg'
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+function App(){
+  const [isOpenedSection, setIsOpenedSection] = useState({
+    about: false,
+    projects: false
+  });
+
+  const openNext = (section) =>{
+    setIsOpenedSection((prev) => ({...prev, [section]: true}));
+  }
+
+  return(
+    
+    <div className="portfolio-container">
+      
+      <div className={`osu-overlay ${isOpenedSection.about ? 'fade-out' : ''}`}>
+        <div className="osu-circle" onClick={() => openNext('about')}>
+          <span>Click</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </div>
 
-      <div className="ticks"></div>
+      <div className="content-section">
+        <div className="about-wrapper">
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <div className="about-left">
+            <div className="photo-box">
+              <img className="profile-photo" src={perfilImg} alt="Foto de Pedro" />
+            </div>
+            <div className="stats-grid">
+              <div className="stat-card pink">
+                <span>Charisma</span>
+                <strong>12</strong>
+              </div>
+              <div className="stat-card blue">
+                <span>Wisdom</span>
+                <strong>10</strong>
+              </div>
+              <div className="stat-card red">
+                <span>Strength</span>
+                <strong>8</strong>
+              </div>
+              <div className="stat-card purple">
+                <span>Intelligence</span>
+                <strong>11</strong>
+              </div>
+              <div className="stat-card gray">
+                <span>Dexterity</span>
+                <strong>12</strong>
+              </div>
+            </div>
+          </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          <div className="about-right">
+            <h2>Pedro Henrique Alves Ferreira</h2>
+            <div className="badges-row">
+              <div className="badge">Lvl. 22</div>
+              <div className="badge">Gen. M</div>
+              <div className="badge">Software Engineer</div>
+            </div>
+            <div className="quote-box">
+              <p>"One of my favorite hobbies is to get deeply immersed in games!"</p>
+            </div>
+            <div className="games-row">
+              <div className="game-art">Obra Dinn</div>
+              <div className="game-art">Half-Life</div>
+              <div className="game-art">Valorant</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isOpenedSection.about && !isOpenedSection.projects && (
+        <div className="osu-overlay" style={{ position: 'relative' }}>
+          <div className="osu-circle" onClick={() => openNext('projects')}>
+            <span>Click</span>
+          </div>
+        </div>
+      )}
+
+      {isOpenedSection.projects && (
+        <div className="content-section fade-in">
+          <h2>Projetos</h2>
+          <p>texto só pra eu n esquecer de colocar coisa depois</p>
+        </div>
+      )}
+
+    </div>  
   )
 }
-
-export default App
+export default App;
