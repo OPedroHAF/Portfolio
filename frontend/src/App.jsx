@@ -1,19 +1,75 @@
 import React, { useState } from 'react';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import './App.css';
 
 import perfilImg from './assets/perfil.jpg';
 import obraDinnImg from './assets/obra_dinn.jpg'
 import halfLifeImg from './assets/Half-Life_2.jpg'
 import valorantImg from './assets/valorant.jpg'
+import linkedinIcon from './assets/linkedin_icon.png'
+import githubIcon from './assets/github_icon.png'
+import whatsappIcon from './assets/whatsapp_icon.png'
+import { getProjectBySlug, projects } from './projects';
 
-function App() {
+function ProjectDetails() {
+  const { projectSlug } = useParams();
+  const navigate = useNavigate();
+  const project = getProjectBySlug(projectSlug);
+
+  if (!project) {
+    return (
+      <main className="content-section project-details-section fade-in">
+        <h1>Project not found</h1>
+        <button className="project-back-link" type="button" onClick={() => navigate('/')}>
+          Back to portfolio
+        </button>
+      </main>
+    );
+  }
+
+  return (
+    <main className="content-section project-details-section fade-in">
+      <button className="project-back-link" type="button" onClick={() => navigate('/')}>
+        &lt; Back
+      </button>
+
+      <div className="projects-title">
+        <h2>{project.title}</h2>
+      </div>
+
+      {project.youtubeVideoId && (
+        <div className="project-details-media">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${project.youtubeVideoId}`}
+            title={project.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      )}
+
+      <p className="project-details-description">{project.description}</p>
+
+      {project.repositoryUrl && (
+        <a className="github-project-link" href={project.repositoryUrl} target="_blank" rel="noreferrer">
+          View project on GitHub
+        </a>
+      )}
+    </main>
+  );
+}
+
+function Portfolio() {
   const [isOpenedSection, setIsOpenedSection] = useState({
     about: false,
-    projects: false
+    projects: false,
+    experience: false,
+    contact: false
   });
-  const [isProjectDetailsOpen, setIsProjectDetailsOpen] = useState(false);
-  const youtubeVideoId = 'https://www.youtube.com/watch?v=2bhWzCuyNWU';
-  const githubRepositoryUrl = '';
+  const navigate = useNavigate();
+  const youtubeVideoId = projects[0].youtubeVideoId;
 
   return (
     <div className="portfolio-container">
@@ -105,31 +161,6 @@ function App() {
       )}
 
       {isOpenedSection.projects && (
-        isProjectDetailsOpen ? (
-          <div className="content-section projects-section project-details-section fade-in">
-            <button
-              className="project-back-link"
-              type="button"
-              onClick={() => setIsProjectDetailsOpen(false)}
-            >
-              Back to Projects
-            </button>
-            <div className="projects-title">
-              <h2>NOME DO PROJETO</h2>
-            </div>
-            <p>Project details will go here.</p>
-            {githubRepositoryUrl && (
-              <a
-                className="github-project-link"
-                href={githubRepositoryUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View source on GitHub
-              </a>
-            )}
-          </div>
-        ) : (
           <div className="content-section projects-section fade-in">
             <div className="projects-title">
               <h2>Projects</h2>
@@ -150,30 +181,167 @@ function App() {
                     <div className="project-placeholder">YouTube video</div>
                   )}
                 </div>
-                <p className="project-caption">How to NOT play Valorant with your friends</p>
+                <div className="project-details">
+                  <p className="project-caption">How to NOT play Valorant with your friends</p>
+                  <button type="button" onClick={() => navigate(`/projects/${projects[0].slug}`)} className="project-details-btn">Details</button>
+                </div>
               </article>
 
-              <button
-                type="button"
-                className="project-card"
-                aria-label="Open details for NOME DO PROJETO"
-                onClick={() => setIsProjectDetailsOpen(true)}
-              >
-                <span className="project-placeholder">Projeto</span>
-                <span className="project-caption">NOME DO PROJETO</span>
-              </button>
+              <article className="project-card">
+                <div className="project-media">
+                  {youtubeVideoId ? (
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}`}
+                      title="How to NOT play Valorant with your friends"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="project-placeholder">YouTube video</div>
+                  )}
+                </div>
+                <div className="project-details">
+                  <p className="project-caption">Cuida+</p>
+                  <button type="button" onClick={() => navigate(`/projects/${projects[1].slug}`)} className="project-details-btn">Details</button>
+                </div>
+              </article>
             </div>
             <button
               className="see-more"
               type="button"
-              onClick={() => setIsProjectDetailsOpen(true)}
+              onClick={() => navigate(`/projects/${projects[0].slug}`)}
             >
               See more
             </button>
           </div>
         )
+      }
+
+      {isOpenedSection.projects && !isOpenedSection.experience && (
+        <div className="osu-overlay section-transition">
+          <button
+            className="osu-circle"
+            type="button"
+            aria-label="Revelar secao experiências"
+            onClick={() => setIsOpenedSection((previous) => ({ ...previous, experience: true }))}
+          >
+            <span>Click</span>
+          </button>
+        </div>
+      )}
+      
+      {isOpenedSection.experience && (
+        <div className="content-section experience-section fade-in">
+          <h2 className="experience-title">Experience</h2>
+
+          <div className="experience-content">
+            <p className="experience-role">
+              <strong>Software Engineering Project Contributor</strong>
+              <em> (Belo Horizonte, MG)</em>
+            </p>
+            <ul className="experience-list">
+              <li>
+                Collaborated with cross-functional student teams on interdisciplinary
+                university projects, following structured requirements engineering,
+                UML modeling, and user-centric design principles.
+              </li>
+              <li>
+                Implemented core software features, managed GitHub repositories for
+                asset and code sharing, and delivered working deployments under
+                project deadlines.
+              </li>
+            </ul>
+          </div>
+
+          <button className="see-more" type="button">
+            See more
+          </button>
+        </div>
+      )}
+
+      {isOpenedSection.experience && !isOpenedSection.contact && (
+        <div className="osu-overlay section-transition">
+          <button
+            className="osu-circle"
+            type="button"
+            aria-label="Revelar secao Contato"
+            onClick={() => setIsOpenedSection((previous) => ({ ...previous, contact: true }))}
+          >
+            <span>Click</span>
+          </button>
+        </div>
+      )}
+
+      {isOpenedSection.contact && (
+        <div className="content-section contact-section fade-in">
+          <h2 className="contact-title">Contact</h2>
+
+          <div className="contact-wrapper">
+            <div className="contact-links">
+              <p className="contact-intro">
+                Let's talk!<br />
+                You can reach me<br />
+                through these links:
+              </p>
+
+              <div className="contact-socials" aria-label="Social media links">
+                <a href="https://www.linkedin.com/in/pedro-henrique-alves-ferreira-67b56626a/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                  <img src={linkedinIcon} alt="" />
+                </a>
+                <a href="https://github.com/OPedroHAF" target="_blank" rel="noreferrer" aria-label="GitHub">
+                  <img src={githubIcon} alt="" />
+                </a>
+                <a href="https://wa.me/" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                  <img src={whatsappIcon} alt="" />
+                </a>
+              </div>
+            </div>
+
+            <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
+              <label>
+                <span>Name</span>
+                <input type="text" name="name" />
+              </label>
+
+              <label>
+                <span>Email</span>
+                <input type="email" name="email" />
+              </label>
+
+              <label>
+                <span>Message</span>
+                <textarea name="message" rows="4" />
+              </label>
+
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isOpenedSection.contact && (
+        <footer className="portfolio-footer fade-in">
+          <p>
+            Designed &amp; built by Pedro Henrique
+            <span aria-hidden="true"> • </span>
+            Belo Horizonte, MG
+            <span aria-hidden="true"> • </span>
+            © 2026
+          </p>
+        </footer>
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route path="/projects/:projectSlug" element={<ProjectDetails />} />
+    </Routes>
   );
 }
 
