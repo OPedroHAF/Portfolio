@@ -468,6 +468,19 @@ html, body, #root{
   font-size: clamp(2rem, 5vw, 4rem);
 }
 
+.project-wip{
+  gap: 12px;
+  background-color: #232327;
+  color: #d1d1e9;
+  font-size: clamp(1.25rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.project-wip-icon{
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+}
 
 .see-more{
   display: inline-flex;

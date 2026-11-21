@@ -70,7 +70,7 @@ function Portfolio() {
   });
   const navigate = useNavigate();
   const youtubeVideoId = projects[0].youtubeVideoId;
-
+  const whatsappUrl = "https://wa.me/5531991577033?text="
   return (
     <div className="portfolio-container">
       <div className={`osu-overlay ${isOpenedSection.about ? 'fade-out' : ''}`}>
@@ -189,21 +189,14 @@ function Portfolio() {
 
               <article className="project-card">
                 <div className="project-media">
-                  {youtubeVideoId ? (
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}`}
-                      title="How to NOT play Valorant with your friends"
-                      loading="lazy"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <div className="project-placeholder">YouTube video</div>
-                  )}
+                  <div className="project-placeholder project-wip" role="img" aria-label="Cuida+ web application in progress">
+                    <span className="project-wip-icon" aria-hidden="true">⚙</span>
+                    <span>WORK IN PROGRESS</span>
+                  </div>
                 </div>
                 <div className="project-details">
                   <p className="project-caption">Cuida+</p>
+                  {projects[1].status && <span>{projects[1].status}</span>}
                   <button type="button" onClick={() => navigate(`/projects/${projects[1].slug}`)} className="project-details-btn">Details</button>
                 </div>
               </article>
@@ -288,33 +281,34 @@ function Portfolio() {
 
               <div className="contact-socials" aria-label="Social media links">
                 <a href="https://www.linkedin.com/in/pedro-henrique-alves-ferreira-67b56626a/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <img src={linkedinIcon} alt="" />
+                  <img src={linkedinIcon} alt="Linkedin icon" />
                 </a>
                 <a href="https://github.com/OPedroHAF" target="_blank" rel="noreferrer" aria-label="GitHub">
-                  <img src={githubIcon} alt="" />
+                  <img src={githubIcon} alt="Github icon" />
                 </a>
-                <a href="https://wa.me/" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-                  <img src={whatsappIcon} alt="" />
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                  <img src={whatsappIcon} alt="Whatsapp icon" />
                 </a>
               </div>
             </div>
 
-            <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
+            <form className="contact-form" action="https://formsubmit.co/evandroferreira191@gmail.com" method="POST">
               <label>
                 <span>Name</span>
-                <input type="text" name="name" />
+                <input type="text" name="name" required/>
               </label>
 
               <label>
                 <span>Email</span>
-                <input type="email" name="email" />
+                <input type="email" name="email" required/>
               </label>
 
               <label>
                 <span>Message</span>
-                <textarea name="message" rows="4" />
+                <textarea name="message" rows="4" required/>
               </label>
 
+              <input type="hidden" name="_subject" value="New message"/>
               <button type="submit">Send</button>
             </form>
           </div>

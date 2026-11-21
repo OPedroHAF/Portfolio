@@ -3,17 +3,17 @@ export const projects = [
     slug: 'valorant-friends',
     title: 'How to NOT play Valorant with your friends',
     description:
-      'A casual gaming project where friends explore funny and chaotic Valorant moments.',
+      'A casual gaming project where friends explore funny and chaotic Valorant moments. Fully edited using CapCut software. Raw material of 44 minutes.',
     youtubeVideoId: '2bhWzCuyNWU',
-    repositoryUrl: ''
+    status: "Finished"
   },
   {
     slug: 'cuida-plus',
     title: 'Cuida+',
     description:
       'A university project focused on creating a practical and user-centered care solution.',
-    youtubeVideoId: '',
-    repositoryUrl: ''
+    repositoryUrl: '',
+    status: "WORK IN PROGRESS"
   }
 ];
 
