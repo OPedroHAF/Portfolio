@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import './App.css';
 
@@ -11,17 +11,111 @@ import githubIcon from './assets/github_icon.png'
 import whatsappIcon from './assets/whatsapp_icon.png'
 import { getProjectBySlug, projects } from './projects';
 
-function ProjectDetails() {
+const translations = {
+  en: {
+    switchLanguage: 'Mudar idioma para português',
+    revealAbout: 'Reveal About section',
+    revealProjects: 'Reveal Projects section',
+    revealExperience: 'Reveal Experience section',
+    revealContact: 'Reveal Contact section',
+    click: 'Click',
+    projectNotFound: 'Project not found',
+    backToPortfolio: 'Back to portfolio',
+    back: '< Back',
+    viewProjectOnGithub: 'View project on GitHub',
+    aboutPhoto: 'Photo of Pedro',
+    level: 'Lvl. 22',
+    gender: 'Gen. M',
+    obraDinnCover: 'Cover of Return of the Obra Dinn',
+    halfLifeCover: 'Cover of Half-Life 2',
+    valorantCover: 'Cover of Valorant',
+    softwareEngineer: 'Software Engineer',
+    favoriteHobby: '"One of my favorite hobbies is to get deeply immersed in games!"',
+    projects: 'Projects',
+    videoTitle: 'How to NOT play Valorant with your friends',
+    youtubeVideo: 'YouTube video',
+    cuidaPlusAlt: 'Cuida+ web application in progress',
+    workInProgress: 'WORK IN PROGRESS',
+    details: 'Details',
+    seeMore: 'See more',
+    experience: 'Experience',
+    experienceRole: 'Software Engineering Project Contributor',
+    experienceDescription: [
+      'Collaborated with cross-functional student teams on interdisciplinary university projects, following structured requirements engineering, UML modeling, and user-centric design principles.',
+      'Implemented core software features, managed GitHub repositories for asset and code sharing, and delivered working deployments under project deadlines.'
+    ],
+    contact: 'Contact',
+    contactIntro: <>Let's talk!<br />You can reach me<br />through these links:</>,
+    socialLinks: 'Social media links',
+    linkedinIcon: 'LinkedIn icon',
+    githubIcon: 'GitHub icon',
+    whatsappIcon: 'WhatsApp icon',
+    name: 'Name',
+    email: 'Email',
+    message: 'Message',
+    send: 'Send',
+    newMessage: 'New message',
+    footer: <>Designed &amp; built by Pedro Henrique<span aria-hidden="true"> • </span>Belo Horizonte, MG<span aria-hidden="true"> • </span>© 2026</>
+  },
+  pt: {
+    switchLanguage: 'Switch language to English',
+    revealAbout: 'Revelar seção Sobre mim',
+    revealProjects: 'Revelar seção Projetos',
+    revealExperience: 'Revelar seção Experiência',
+    revealContact: 'Revelar seção Contato',
+    click: 'Clique',
+    projectNotFound: 'Projeto não encontrado',
+    backToPortfolio: 'Voltar ao portfólio',
+    back: '< Voltar',
+    viewProjectOnGithub: 'Ver projeto no GitHub',
+    aboutPhoto: 'Foto de Pedro',
+    level: 'Nível 22',
+    gender: 'Gênero M',
+    obraDinnCover: 'Capa de Return of the Obra Dinn',
+    halfLifeCover: 'Capa de Half-Life 2',
+    valorantCover: 'Capa de Valorant',
+    softwareEngineer: 'Engenheiro de Software',
+    favoriteHobby: '"Um dos meus hobbies favoritos é mergulhar de cabeça nos jogos!"',
+    projects: 'Projetos',
+    videoTitle: 'Como NÃO jogar Valorant com seus amigos',
+    youtubeVideo: 'Vídeo do YouTube',
+    cuidaPlusAlt: 'Aplicação web Cuida+ em desenvolvimento',
+    workInProgress: 'EM DESENVOLVIMENTO',
+    details: 'Detalhes',
+    seeMore: 'Saiba mais',
+    experience: 'Experiência',
+    experienceRole: 'Colaborador em projetos de Engenharia de Software',
+    experienceDescription: [
+      'Colaborei com equipes estudantis multidisciplinares em projetos universitários, aplicando engenharia de requisitos, modelagem UML e princípios de design centrado no usuário.',
+      'Implementei funcionalidades, gerenciei repositórios GitHub para compartilhamento de código e recursos, e publiquei versões funcionais dentro dos prazos dos projetos.'
+    ],
+    contact: 'Contato',
+    contactIntro: <>Vamos conversar!<br />Você pode falar comigo<br />por estes canais:</>,
+    socialLinks: 'Links para redes sociais',
+    linkedinIcon: 'Ícone do LinkedIn',
+    githubIcon: 'Ícone do GitHub',
+    whatsappIcon: 'Ícone do WhatsApp',
+    name: 'Nome',
+    email: 'E-mail',
+    message: 'Mensagem',
+    send: 'Enviar',
+    newMessage: 'Nova mensagem',
+    footer: <>Desenvolvido por Pedro Henrique<span aria-hidden="true"> • </span>Belo Horizonte, MG<span aria-hidden="true"> • </span>© 2026</>
+  }
+};
+
+function ProjectDetails({ language, copy }) {
   const { projectSlug } = useParams();
   const navigate = useNavigate();
   const project = getProjectBySlug(projectSlug);
+  const projectCopy = project?.translations?.[language];
 
   if (!project) {
     return (
       <main className="content-section project-details-section fade-in">
-        <h1>Project not found</h1>
+        <h1>{copy.projectNotFound}</h1>
         <button className="project-back-link" type="button" onClick={() => navigate('/')}>
-          Back to portfolio
+          {copy.backToPortfolio}
         </button>
       </main>
     );
@@ -30,18 +124,18 @@ function ProjectDetails() {
   return (
     <main className="content-section project-details-section fade-in">
       <button className="project-back-link" type="button" onClick={() => navigate('/')}>
-        &lt; Back
+        {copy.back}
       </button>
 
       <div className="projects-title">
-        <h2>{project.title}</h2>
+        <h2>{projectCopy?.title ?? project.title}</h2>
       </div>
 
       {project.youtubeVideoId && (
         <div className="project-details-media">
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${project.youtubeVideoId}`}
-            title={project.title}
+            title={projectCopy?.title ?? project.title}
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -50,18 +144,18 @@ function ProjectDetails() {
         </div>
       )}
 
-      <p className="project-details-description">{project.description}</p>
+      <p className="project-details-description">{projectCopy?.description ?? project.description}</p>
 
       {project.repositoryUrl && (
         <a className="github-project-link" href={project.repositoryUrl} target="_blank" rel="noreferrer">
-          View project on GitHub
+          {copy.viewProjectOnGithub}
         </a>
       )}
     </main>
   );
 }
 
-function Portfolio() {
+function Portfolio({ language, copy }) {
   const [isOpenedSection, setIsOpenedSection] = useState({
     about: false,
     projects: false,
@@ -77,10 +171,10 @@ function Portfolio() {
         <button
           className="osu-circle"
           type="button"
-          aria-label="Revelar secao Sobre mim"
+          aria-label={copy.revealAbout}
           onClick={() => setIsOpenedSection((previous) => ({ ...previous, about: true }))}
         >
-          <span>Click</span>
+          <span>{copy.click}</span>
         </button>
       </div>
 
@@ -88,7 +182,7 @@ function Portfolio() {
         <div className="about-wrapper">
           <div className="about-left">
             <div className="photo-box">
-              <img className="profile-photo" src={perfilImg} alt="Foto de Pedro" />
+              <img className="profile-photo" src={perfilImg} alt={copy.aboutPhoto} />
             </div>
 
             <div className="stats-grid">
@@ -123,23 +217,23 @@ function Portfolio() {
             <h2>Pedro Henrique Alves Ferreira</h2>
 
             <div className="badges-row">
-              <div className="badge">Lvl. 22</div>
-              <div className="badge">Gen. M</div>
-              <div className="badge">Software Engineer</div>
+              <div className="badge">{copy.level}</div>
+              <div className="badge">{copy.gender}</div>
+              <div className="badge">{copy.softwareEngineer}</div>
             </div>
 
             <div className="quote-box">
-              <p>"One of my favorite hobbies is to get deeply immersed in games!"</p>
+              <p>{copy.favoriteHobby}</p>
             </div>
 
             <div className="games-row">
-              <div className="game-art obra-dinn" role="img" aria-label="Capa de Return of the Obra Dinn">
+              <div className="game-art obra-dinn" role="img" aria-label={copy.obraDinnCover}>
                 <img src={obraDinnImg} alt="" />
               </div>
-              <div className="game-art half-life" role="img" aria-label="Capa de Half-Life 2">
+              <div className="game-art half-life" role="img" aria-label={copy.halfLifeCover}>
                 <img src={halfLifeImg} alt="" />
               </div>
-              <div className="game-art valorant" role="img" aria-label="Capa de Valorant">
+              <div className="game-art valorant" role="img" aria-label={copy.valorantCover}>
                 <img src={valorantImg} alt="" />
               </div>
             </div>
@@ -152,10 +246,10 @@ function Portfolio() {
           <button
             className="osu-circle"
             type="button"
-            aria-label="Revelar secao Projetos"
+            aria-label={copy.revealProjects}
             onClick={() => setIsOpenedSection((previous) => ({ ...previous, projects: true }))}
           >
-            <span>Click</span>
+            <span>{copy.click}</span>
           </button>
         </div>
       )}
@@ -163,7 +257,7 @@ function Portfolio() {
       {isOpenedSection.projects && (
           <div className="content-section projects-section fade-in">
             <div className="projects-title">
-              <h2>Projects</h2>
+              <h2>{copy.projects}</h2>
             </div>
             <div className="projects-wrapper">
               <article className="project-card">
@@ -171,33 +265,33 @@ function Portfolio() {
                   {youtubeVideoId ? (
                     <iframe
                       src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}`}
-                      title="How to NOT play Valorant with your friends"
+                      title={copy.videoTitle}
                       loading="lazy"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
                       allowFullScreen
                     />
                   ) : (
-                    <div className="project-placeholder">YouTube video</div>
+                    <div className="project-placeholder">{copy.youtubeVideo}</div>
                   )}
                 </div>
                 <div className="project-details">
-                  <p className="project-caption">How to NOT play Valorant with your friends</p>
-                  <button type="button" onClick={() => navigate(`/projects/${projects[0].slug}`)} className="project-details-btn">Details</button>
+                  <p className="project-caption">{projects[0].translations?.[language]?.title ?? projects[0].title}</p>
+                  <button type="button" onClick={() => navigate(`/projects/${projects[0].slug}`)} className="project-details-btn">{copy.details}</button>
                 </div>
               </article>
 
               <article className="project-card">
                 <div className="project-media">
-                  <div className="project-placeholder project-wip" role="img" aria-label="Cuida+ web application in progress">
+                  <div className="project-placeholder project-wip" role="img" aria-label={copy.cuidaPlusAlt}>
                     <span className="project-wip-icon" aria-hidden="true">⚙</span>
-                    <span>WORK IN PROGRESS</span>
+                    <span>{copy.workInProgress}</span>
                   </div>
                 </div>
                 <div className="project-details">
-                  <p className="project-caption">Cuida+</p>
-                  {projects[1].status && <span>{projects[1].status}</span>}
-                  <button type="button" onClick={() => navigate(`/projects/${projects[1].slug}`)} className="project-details-btn">Details</button>
+                  <p className="project-caption">{projects[1].translations?.[language]?.title ?? projects[1].title}</p>
+                  {projects[1].status && <span>{projects[1].translations?.[language]?.status ?? projects[1].status}</span>}
+                  <button type="button" onClick={() => navigate(`/projects/${projects[1].slug}`)} className="project-details-btn">{copy.details}</button>
                 </div>
               </article>
             </div>
@@ -206,7 +300,7 @@ function Portfolio() {
               type="button"
               onClick={() => navigate(`/projects/${projects[0].slug}`)}
             >
-              See more
+              {copy.seeMore}
             </button>
           </div>
         )
@@ -217,39 +311,30 @@ function Portfolio() {
           <button
             className="osu-circle"
             type="button"
-            aria-label="Revelar secao experiências"
+            aria-label={copy.revealExperience}
             onClick={() => setIsOpenedSection((previous) => ({ ...previous, experience: true }))}
           >
-            <span>Click</span>
+            <span>{copy.click}</span>
           </button>
         </div>
       )}
       
       {isOpenedSection.experience && (
         <div className="content-section experience-section fade-in">
-          <h2 className="experience-title">Experience</h2>
+          <h2 className="experience-title">{copy.experience}</h2>
 
           <div className="experience-content">
             <p className="experience-role">
-              <strong>Software Engineering Project Contributor</strong>
+              <strong>{copy.experienceRole}</strong>
               <em> (Belo Horizonte, MG)</em>
             </p>
             <ul className="experience-list">
-              <li>
-                Collaborated with cross-functional student teams on interdisciplinary
-                university projects, following structured requirements engineering,
-                UML modeling, and user-centric design principles.
-              </li>
-              <li>
-                Implemented core software features, managed GitHub repositories for
-                asset and code sharing, and delivered working deployments under
-                project deadlines.
-              </li>
+              {copy.experienceDescription.map((description) => <li key={description}>{description}</li>)}
             </ul>
           </div>
 
           <button className="see-more" type="button">
-            See more
+            {copy.seeMore}
           </button>
         </div>
       )}
@@ -259,57 +344,53 @@ function Portfolio() {
           <button
             className="osu-circle"
             type="button"
-            aria-label="Revelar secao Contato"
+            aria-label={copy.revealContact}
             onClick={() => setIsOpenedSection((previous) => ({ ...previous, contact: true }))}
           >
-            <span>Click</span>
+            <span>{copy.click}</span>
           </button>
         </div>
       )}
 
       {isOpenedSection.contact && (
         <div className="content-section contact-section fade-in">
-          <h2 className="contact-title">Contact</h2>
+          <h2 className="contact-title">{copy.contact}</h2>
 
           <div className="contact-wrapper">
             <div className="contact-links">
-              <p className="contact-intro">
-                Let's talk!<br />
-                You can reach me<br />
-                through these links:
-              </p>
+              <p className="contact-intro">{copy.contactIntro}</p>
 
-              <div className="contact-socials" aria-label="Social media links">
+              <div className="contact-socials" aria-label={copy.socialLinks}>
                 <a href="https://www.linkedin.com/in/pedro-henrique-alves-ferreira-67b56626a/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <img src={linkedinIcon} alt="Linkedin icon" />
+                  <img src={linkedinIcon} alt={copy.linkedinIcon} />
                 </a>
                 <a href="https://github.com/OPedroHAF" target="_blank" rel="noreferrer" aria-label="GitHub">
-                  <img src={githubIcon} alt="Github icon" />
+                  <img src={githubIcon} alt={copy.githubIcon} />
                 </a>
                 <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label="WhatsApp">
-                  <img src={whatsappIcon} alt="Whatsapp icon" />
+                  <img src={whatsappIcon} alt={copy.whatsappIcon} />
                 </a>
               </div>
             </div>
 
             <form className="contact-form" action="https://formsubmit.co/evandroferreira191@gmail.com" method="POST">
               <label>
-                <span>Name</span>
-                <input type="text" name="name" required/>
+                <span>{copy.name}</span>
+                <input type="text" name="name" required />
               </label>
 
               <label>
-                <span>Email</span>
-                <input type="email" name="email" required/>
+                <span>{copy.email}</span>
+                <input type="email" name="email" required />
               </label>
 
               <label>
-                <span>Message</span>
-                <textarea name="message" rows="4" required/>
+                <span>{copy.message}</span>
+                <textarea name="message" rows="4" required />
               </label>
 
-              <input type="hidden" name="_subject" value="New message"/>
-              <button type="submit">Send</button>
+              <input type="hidden" name="_subject" value={copy.newMessage} />
+              <button type="submit">{copy.send}</button>
             </form>
           </div>
         </div>
@@ -318,11 +399,7 @@ function Portfolio() {
       {isOpenedSection.contact && (
         <footer className="portfolio-footer fade-in">
           <p>
-            Designed &amp; built by Pedro Henrique
-            <span aria-hidden="true"> • </span>
-            Belo Horizonte, MG
-            <span aria-hidden="true"> • </span>
-            © 2026
+            {copy.footer}
           </p>
         </footer>
       )}
@@ -331,11 +408,36 @@ function Portfolio() {
 }
 
 function App() {
+  const [language, setLanguage] = useState(() => (
+    localStorage.getItem('portfolio-language') === 'pt' ? 'pt' : 'en'
+  ));
+  const copy = translations[language];
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  const toggleLanguage = () => {
+    const nextLanguage = language === 'en' ? 'pt' : 'en';
+    localStorage.setItem('portfolio-language', nextLanguage);
+    setLanguage(nextLanguage);
+  };
+
   return (
-    <Routes>
-      <Route path="/" element={<Portfolio />} />
-      <Route path="/projects/:projectSlug" element={<ProjectDetails />} />
-    </Routes>
+    <>
+      <button
+        className="language-toggle"
+        type="button"
+        aria-label={copy.switchLanguage}
+        onClick={toggleLanguage}
+      >
+        {language === 'en' ? 'EN' : 'PT'}
+      </button>
+      <Routes>
+        <Route path="/" element={<Portfolio language={language} copy={copy} />} />
+        <Route path="/projects/:projectSlug" element={<ProjectDetails language={language} copy={copy} />} />
+      </Routes>
+    </>
   );
 }
 

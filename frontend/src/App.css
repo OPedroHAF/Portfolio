@@ -838,3 +838,30 @@ html, body, #root{
     height: 136px;
   }
 }
+
+.language-toggle{
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  min-width: 52px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  background-color: #34304c;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.language-toggle:hover,
+.language-toggle:focus-visible{
+  background-color: #45405f;
+}
+
+.language-toggle:focus-visible{
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
