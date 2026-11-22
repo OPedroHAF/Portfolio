@@ -57,6 +57,7 @@ O projeto foi desenvolvido com React e Vite e atualmente é totalmente executado
 - informações sobre experiência;
 - links para LinkedIn, GitHub e WhatsApp;
 - formulário de contato com envio por e-mail;
+- alternância entre português e inglês, com preferência salva no navegador;
 - layout responsivo;
 - animações de transição entre as seções.
 
@@ -82,6 +83,7 @@ O projeto foi desenvolvido com React e Vite e atualmente é totalmente executado
 O projeto utiliza uma arquitetura simples baseada em componentes:
 
 - `App.jsx` concentra as telas de portfólio e de detalhes dos projetos;
+- o idioma pode ser alternado entre português e inglês; a preferência é persistida em `localStorage`;
 - `projects.js` mantém os dados dos projetos em uma estrutura centralizada;
 - `App.css` e `index.css` definem os estilos da aplicação;
 - `assets/` contém imagens e ícones utilizados pela interface;
